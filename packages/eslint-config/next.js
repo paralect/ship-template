@@ -20,6 +20,8 @@ export default getNodeConfig({
         'error',
         {
           groups: [
+            // Side effect imports.
+            ['^\\u0000'],
             // Third-party libraries and frameworks
             ['^react$', '^next', '^@mantine/core$', '^@mantine/', '^@?\\w'],
             // Particular business entities
@@ -42,8 +44,6 @@ export default getNodeConfig({
             ['^\\.\\.(?!/?$)', '^\\.\\./?$', '^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'],
             // Style imports.
             ['^.+\\.?(css|scss|sass)$'],
-            // Side effect imports.
-            ['^\\u0000'],
           ],
         },
       ],
@@ -66,6 +66,7 @@ export default getNodeConfig({
 
         'react/react-in-jsx-scope': 'off',
         'react/jsx-boolean-value': ['error', 'never'],
+        'react/jsx-curly-brace-presence': ['error', { props: 'never', children: 'never' }],
         'react/function-component-definition': [
           'error',
           {
