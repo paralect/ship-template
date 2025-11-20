@@ -13,20 +13,19 @@ export const paginationSchema = z.object({
     .object({
       createdOn: z.enum(['asc', 'desc']).default('asc'),
     })
-    .default({}),
+    .default({ createdOn: 'asc' }),
 });
 
 export const emailSchema = z
-  .string()
-  .nonempty('Email is required')
+  .email()
+  .min(1, 'Email is required')
   .toLowerCase()
   .trim()
-  .email()
   .max(255, 'Email must be less than 255 characters.');
 
 export const passwordSchema = z
   .string()
-  .nonempty('Password is required')
+  .min(1, 'Password is required')
   .min(PASSWORD_RULES.MIN_LENGTH, `Password must be at least ${PASSWORD_RULES.MIN_LENGTH} characters.`)
   .max(PASSWORD_RULES.MAX_LENGTH, `Password must be less than ${PASSWORD_RULES.MAX_LENGTH} characters.`)
   .regex(

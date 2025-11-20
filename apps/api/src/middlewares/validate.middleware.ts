@@ -1,11 +1,11 @@
-import { ZodError, ZodIssue, ZodSchema } from 'zod';
+import { ZodError, ZodType } from 'zod';
 
 import { AppKoaContext, Next, ValidationErrors } from 'types';
 
 const formatError = (zodError: ZodError): ValidationErrors => {
   const errors: ValidationErrors = {};
 
-  zodError.issues.forEach((error: ZodIssue) => {
+  zodError.issues.forEach((error) => {
     const key = error.path.join('.');
 
     if (!errors[key]) {
@@ -18,7 +18,7 @@ const formatError = (zodError: ZodError): ValidationErrors => {
   return errors;
 };
 
-const validate = (schema: ZodSchema) => async (ctx: AppKoaContext, next: Next) => {
+const validate = (schema: ZodType) => async (ctx: AppKoaContext, next: Next) => {
   const result = await schema.safeParseAsync({
     ...ctx.request.body,
     ...ctx.request.files,
@@ -28,7 +28,7 @@ const validate = (schema: ZodSchema) => async (ctx: AppKoaContext, next: Next) =
 
   if (!result.success) ctx.throw(400, { clientErrors: formatError(result.error) });
 
-  ctx.validatedData = result.data;
+  ctx.validatedData = result.data as object;
 
   await next();
 };

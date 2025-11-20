@@ -19,10 +19,10 @@ import { User } from 'types';
 
 const googleUserInfoSchema = z.object({
   sub: z.string().describe('Unique Google user ID'),
-  email: z.string().email().describe('User email'),
+  email: z.email().describe('User email'),
   email_verified: z.boolean().describe('Email verification status'),
   name: z.string().describe('User full name'),
-  picture: z.string().url().describe('Profile picture URL').optional(),
+  picture: z.url().describe('Profile picture URL').optional(),
   given_name: z.string().describe('First name'),
   family_name: z.string().describe('Last name'),
 });
@@ -34,7 +34,7 @@ const googleCallbackParamsSchema = z
     storedState: z.string(),
     codeVerifier: z.string(),
   })
-  .refine((data) => data.state === data.storedState, { message: 'OAuth state mismatch' });
+  .refine((data) => data.state === data.storedState, { error: 'OAuth state mismatch' });
 
 export const googleClient = new Google(
   config.GOOGLE_CLIENT_ID!,
@@ -132,7 +132,7 @@ export const validateCallback = async (params: {
     const errorMessage = 'Failed to validate Google authentication data.';
 
     logger.error(`[Google OAuth] ${errorMessage}`);
-    logger.error(parsedParams.error.flatten().fieldErrors);
+    logger.error(z.treeifyError(parsedParams.error).errors);
 
     throw new Error(errorMessage);
   }
@@ -165,7 +165,7 @@ export const validateCallback = async (params: {
     const errorMessage = 'Failed to validate Google user info';
 
     logger.error(`[Google OAuth] ${errorMessage}`);
-    logger.error(parsedUserInfo.error.flatten().fieldErrors);
+    logger.error(z.treeifyError(parsedUserInfo.error).errors);
 
     throw new Error(errorMessage);
   }
