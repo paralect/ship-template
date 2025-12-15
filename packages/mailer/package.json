@@ -22,7 +22,7 @@
     "react-dom": "catalog:"
   },
   "devDependencies": {
-    "@react-email/preview-server": "5.0.6",
+    "@react-email/preview-server": "5.0.8",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "eslint": "catalog:",
@@ -30,7 +30,7 @@
     "lint-staged": "catalog:",
     "prettier": "catalog:",
     "prettier-config": "workspace:*",
-    "react-email": "5.0.6",
+    "react-email": "5.0.8",
     "tsconfig": "workspace:*",
     "typescript": "catalog:"
   },
